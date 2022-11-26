@@ -2,6 +2,6 @@
 
 Крутые проекты по TR:
 
-https://github.com/gstroin/Team-Run-Image-Converter
+https://github.com/gstroin/Team-Run-Image-Converter (я буквально взял оттуда код хдхд)
 
-https://github.com/Nebulaxin/TRTools
+https://github.com/Nebulaxin/TRTools (да)
