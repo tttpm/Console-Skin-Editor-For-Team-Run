@@ -191,7 +191,7 @@ while 1:
         if key == 'left' and selected[1] > 0: selected[1] -= 1
 
         if key == 'esc':
-            print('\n\n"c" - change color\n"m" - change mode\n"ex" - export skin\n"i" - import skin\n"cl" - clear canvas')
+            print('\n\n"c" - change color\n"m" - change mode\n"e" - export skin\n"i" - import skin\n"cl" - clear canvas')
             action = input("\nwhat do you want to do?\n")
 
             if action == 'cl': picture = [[a] * 20 for i in range (18)][::]
@@ -252,7 +252,7 @@ while 1:
 
             
     except Exception as e:
-        print('ERROR CATCHED:', e)
+        print('ERROR CAUGHT:', e)
         print('press esc to continue')
         kb.wait("esc")
 
