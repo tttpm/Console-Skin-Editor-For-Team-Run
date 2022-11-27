@@ -73,7 +73,9 @@ def print_pic():
     print('#'*62)
 
 def decode_hex(hexx):
-    if hexx[-2:] == '00' and len(hexx) == 8: return a
+    if len(hexx) == 8:
+        if hexx[-2:] == '00':
+            return a
     hexx = hexx.upper()
     digits = '0123456789ABCDEF'
     cat = list(map(lambda d: digits.index(d), hexx[:]))
@@ -178,7 +180,7 @@ def print_logo():
         print()
 
 
-def get_png(skin):
+def skin_to_png(skin):
     
     compressed = base64.b64decode(skin.replace("trSkin1", ""))
     decompressed = str(zlib.decompress(compressed, -zlib.MAX_WBITS).decode())
@@ -212,7 +214,20 @@ def get_png(skin):
     return img
 
 
+def import_png(img):
+    
+    pixels = img.load()
 
+    i = 0
+    for y in range(0, img.size[1]):
+        for x in range(0, img.size[0]):
+            
+            r,g,b,a = pixels[x, y]
+
+            if a < 100:
+                picture[y][x] = a
+            else:
+                picture[y][x] = (r,g,b)
 
 print_logo()
 print('Console Skin Editor for Team Run (by '+color(255,102,0)+'Tipim'+default+')')
@@ -256,12 +271,12 @@ while 1:
 
                 
             elif action == 'e':
-                print('your skin:')
+                print('your skin:\n')
                 text = export_skin()
                 print(text)
                 bebra = input('\nwrite "png" to save skin as .PNG file;\nwrite "otrmap" to save skin as .OTRMAP file\nwrite something else to continue\n>> ')
 
-                png = get_png(text)
+                png = skin_to_png(text)
                 
                 if bebra == 'png':
                     path = input("\nenter full path to file (if file with same name exists, it will be rewritten):\n>> ")
@@ -279,11 +294,31 @@ while 1:
                     kb.wait("esc")
 
             elif action == 'i':
-                inp = input('enter your skin:\n>> ')
-                if inp.lower() in ['suncat', 'tdf', 'солнцекот', 'cjkywtrjn']:
-                    import_skin(suncat)
-                else:
-                    import_skin(inp)
+                amogum = input('\nLoad skin from...\n"t" - text\n"i" - image (PNG)\n>> ')
+                if amogum == 't':
+                    inp = input('enter your skin:\n>> ')
+                    if inp.lower() in ['suncat', 'tdf', 'солнцекот', 'cjkywtrjn']:
+                        import_skin(suncat)
+                    else:
+                        import_skin(inp)
+                elif amogum == 'i':
+                    print(f"\nAttention! CSETR does {color(252,0,0)}not{default} support RGBA, only RGB!")
+                    
+                    path = input("\nenter full path to your image:\n>> ")
+                    png = Image.open(path)
+
+                    if png.size[0] != 20 or png.size[1] != 18:
+                        print('image must be 20x18')
+                        print('press [esc] to continue')
+                        kb.wait("esc")
+                        continue
+                        
+                    import_png(png)
+                    
+                    print('done!\npress [esc] to continue')
+                    kb.wait("esc")
+
+                
             else:
                 print('unknown command!')
                 print('press [esc] to continue')
