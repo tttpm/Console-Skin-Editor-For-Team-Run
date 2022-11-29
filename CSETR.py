@@ -2,6 +2,7 @@ from time import sleep
 from os import system  #built-in libs
 import zlib
 import base64
+import traceback
 
 import keyboard as kb
 import colorama
@@ -124,25 +125,21 @@ try:
 except:
     
     bgc_hex = "0c0c0c"
-    defhex = 'cccccc'
+    def_hex = 'cccccc'
     bg_skin = 'trSkin1MzCAAGuDUcYAMRwNQNDNDcFwgwJ6MIaQU8lz/Eh2s6OriamlCzKDPDWjbh5182Bw82i5gd/NZi5GTmZGQMVwBmYM0pMx6uZRN1Pi5kHieOo3+Sizi55OHSRuBgA='
-
-
-    
-bgcf = color(*decode_hex(bgc_hex))
-bgcb = color(*decode_hex(bgc_hex), back = True, fore = False)
-default = color(*decode_hex(defhex))
-bg = import_skin(bg_skin)
-
-    
 
 def save_config():
     with open("CSETR_config.txt", 'w') as file:
         print(bgc_hex,
-              defhex,
+              def_hex,
               bg_skin,
               
               file = file, sep = '\n')
+    
+bgcf = color(*decode_hex(bgc_hex))
+bgcb = color(*decode_hex(bgc_hex), back = True, fore = False)
+default = color(*decode_hex(def_hex))
+bg = import_skin(bg_skin)
 
 sqr = '■'
 selected = [0, 0]
@@ -172,8 +169,9 @@ def print_pic():
 
 
             if [i, j] == selected:
-                
-                print(back+color(*current_color)+'['+fore+pix+color(*current_color)+']'+clear_color, end = '')
+                if not current_color: lmao = color(*decode_hex(bgc_hex))
+                else: lmao = color(*current_color)
+                print(back+lmao+'['+fore+pix+lmao+']'+clear_color, end = '')
                 
             else:
                 print(back+fore+' '+pix+' '+clear_color, end = '') 
@@ -275,7 +273,9 @@ while 1:
     try:
         system("cls")
         print_pic()
-        print(f"\ncurrent color = {color(*current_color)}#{encode_hex(current_color)[:-2]}{default}\ncurrent mode = {mode}\n\nto open menu, press [esc];\npress [ctrl] for help")
+        if not current_color: lol1, lol2 = default, 'empty'
+        else: lol1, lol2 = color(*current_color), '#' + encode_hex(current_color)[:-2]
+        print(f"\ncurrent color = {lol1+lol2+default}\ncurrent mode = {mode}\n\nto open menu, press [esc];\npress [ctrl] for help")
         key = kb.read_key()
         
         if key == 'down' and selected[0] < pic_size[0] - 1: selected[0] += 1
@@ -373,9 +373,17 @@ while 1:
                 print(f'''
 
 current parameters:
-background color - #{bgcf}{bgc_hex}{default}(default - #0c0c0c)
-UI color - #{defhex} (default - #cccccc)
+
+
+background color - {bgcf}#{bgc_hex}{default}(default - #0c0c0c)
+
+
+UI color - #{def_hex} (default - #cccccc)
+
+
 background skin - {bg_skin}
+
+(default - trSkin1MzCAAGuDUcYAMRwNQNDNDcFwgwJ6MIaQU8lz/Eh2s6OriamlCzKDPDWjbh5182Bw82i5gd/NZi5GTmZGQMVwBmYM0pMx6uZRN1Pi5kHieOo3+Sizi55OHSRuBgA=)
 ''')
                 act = input('\n"bc" - change background color\n"bs" - change background skin\n"ui" - change UI color\n>> ')
                 if act == 'bc':
@@ -383,8 +391,8 @@ background skin - {bg_skin}
                     bgcb = color(*decode_hex(bgc_hex), back  = True, fore = False)
                     bgcf = color(*decode_hex(bgc_hex))
                 elif act == 'ui':
-                    defhex = input("new UI color:\n>> ").replace('#','')
-                    default = color(*decode_hex(defhex))
+                    def_hex = input("new UI color:\n>> ").replace('#','')
+                    default = color(*decode_hex(def_hex))
                 elif act == 'bs':
                     bg_skin = input("new background skin:\n>> ")
                     bg = import_skin(bg_skin)
@@ -407,7 +415,8 @@ background skin - {bg_skin}
 
             elif mode == 'eraser': picture[selected[0]][selected[1]] = a
 
-            elif mode == 'pipette':current_color = picture[selected[0]][selected[1]] 
+            elif mode == 'pipette':
+                current_color = picture[selected[0]][selected[1]]
 
             elif mode == 'fill': fill()
         if key == 'ctrl':
@@ -423,7 +432,8 @@ background skin - {bg_skin}
             kb.wait("esc")
 
             
-    except Exception as e:
-        print('ERROR CAUGHT:', e)
-        print('press [esc] to continue')
+    except Exception:
+        print('\nERROR CAUGHT:\n')
+        traceback.print_exc()
+        print('\npress [esc] to continue')
         kb.wait("esc")
