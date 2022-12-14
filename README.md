@@ -1,4 +1,4 @@
-*dies from cringe*
+*dies of cringe*
 
 Крутые проекты по TR:
 
