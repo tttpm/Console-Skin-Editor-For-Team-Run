@@ -1,9 +1,11 @@
-*dies of cringe*
+oh hell...
 
-Крутые проекты по TR:
+i forgor about this repo...
 
-https://github.com/gstroin/Team-Run-Image-Converter (я буквально взял оттуда код хдхд)
+...cuz i'm decided to rewrite whole CSETR (really, this code is so... horrible...)
 
-https://github.com/Nebulaxin/TRTools (да)
+so
 
-https://github.com/DKorjey/trase ((более удобный редактор))
+repo is now dead, but i'm workin on new one
+
+...maybe...
